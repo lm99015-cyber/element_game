@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>원소 조합 퍼즐</title>
+<title>원소 조합</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -34,7 +34,20 @@
   .hud{ padding:14px 22px; }
   .hud-val{ font-size:28px; }
   .hud-label{ font-size:11px; }
-  .btn-hud-home{ font-size:13px; padding:9px 16px; }
+  .btn-hud-home{
+  display:flex;align-items:center;gap:5px;
+  color:#3b1a00;font-weight:800;text-decoration:none;
+  border:2px solid #a07010;border-radius:20px;
+  background:linear-gradient(135deg,#e8c84a,#c8960a);
+  transition:all .15s;
+  font-family:'Noto Sans KR',sans-serif;
+  white-space:nowrap;flex-shrink:0;
+  box-shadow:0 2px 8px rgba(140,90,0,0.35);
+  text-shadow:0 1px 0 rgba(255,255,255,0.3);
+  padding:clamp(6px,0.8vw,12px) clamp(10px,1.2vw,22px);
+  font-size:clamp(11px,1.1vw,16px);
+  cursor:pointer;
+}
   .q-formula{ font-size:clamp(60px,8vw,88px); }
   .q-name{ font-size:15px; }
   .q-hint{ font-size:13px; }
@@ -192,7 +205,7 @@ body::before{
   color:var(--muted);font-family:'Noto Sans KR',sans-serif;
   transition:all 0.15s;white-space:nowrap;
 }
-.btn-hud-home:hover{border-color:var(--accent);color:var(--accent);background:#fff3ec;}
+.btn-hud-home:hover{background:linear-gradient(135deg,#d4a017,#b08010);border-color:#805000;filter:brightness(1.05);}
 
 /* ════════════ NAME SCREEN ════════════ */
 #screen-name{text-align:center;gap:0}
@@ -617,15 +630,18 @@ body::before{
 /* ── 탐험맵 돌아가기 버튼 ── */
 .map-btn-wrap{position:absolute;top:20px;left:20px;z-index:10;}
 .map-btn{
-  display:inline-flex;align-items:center;gap:7px;
-  color:#5c7a2e;font-size:13px;font-weight:700;text-decoration:none;
-  border:2px solid #b5d97a;border-radius:24px;
-  padding:8px 18px;background:#f0fde0;
-  transition:all .2s;box-shadow:0 2px 8px rgba(100,160,50,.15);
+  display:inline-flex;align-items:center;gap:5px;
+  color:#3b1a00;font-weight:800;text-decoration:none;
+  border:2px solid #a07010;border-radius:20px;
+  background:linear-gradient(135deg,#e8c84a,#c8960a);
+  transition:all .15s;
   font-family:'Noto Sans KR',sans-serif;
+  white-space:nowrap;
+  box-shadow:0 2px 8px rgba(140,90,0,0.35);
+  text-shadow:0 1px 0 rgba(255,255,255,0.3);
+  padding:8px 18px;font-size:13px;
 }
-.map-btn::before{content:"←";font-size:14px;}
-.map-btn:hover{background:#d4f5a0;border-color:#8ac840;transform:translateX(-2px);}
+.map-btn:hover{background:linear-gradient(135deg,#d4a017,#b08010);border-color:#805000;filter:brightness(1.05);}
 @media(max-width:599px){
   .map-btn{font-size:11px;padding:6px 12px;}
   .map-btn-wrap{top:12px;left:12px;}
@@ -683,17 +699,17 @@ body::before{
 
 <!-- ══ TITLE SCREEN ══ -->
 <div class="page" id="screen-title">
-  <div class="map-btn-wrap"><a class="map-btn" href="https://lm99015-cyber.github.io/game_level/">원소 게임 탐험맵으로</a></div>
+  <div class="map-btn-wrap"><a class="map-btn" href="https://lm99015-cyber.github.io/game_level/">🎮 원소게임선택 (ZONE)</a></div>
 
   <div class="title-badge">⚗️ Chemistry Quiz</div>
-  <div class="title-main">⚗️ 원소 조합 <span>퍼즐</span> 🧪</div>
-  <div class="title-sub">화합물을 보고 구성 원소를 맞혀보세요!</div>
+  <div class="title-main">⚗️ 원소 <span>조합</span> 🧪</div>
+  <div class="title-sub">화학식을 보고 구성 원소를 맞혀보세요!</div>
 
   <div class="rules-wrap">
     <div class="rule-card">
       <div class="rule-icon">🎯</div>
       <div class="rule-title">10문항</div>
-      <div class="rule-desc">랜덤 화합물에서 원소를 골라내세요</div>
+      <div class="rule-desc">랜덤 화학식에서 원소를 골라내세요</div>
     </div>
     <div class="rule-card">
       <div class="rule-icon">⏱️</div>
@@ -754,7 +770,7 @@ body::before{
     </div>
     <div style="display:flex;gap:6px;">
       <button class="btn-hud-home" onclick="stopTimer();goName()">← 처음으로</button>
-      <button class="btn-hud-home" onclick="window.location.href='https://lm99015-cyber.github.io/game_level/'">🗺️ 게임탐험맵</button>
+      <button class="btn-hud-home" onclick="window.location.href='https://lm99015-cyber.github.io/game_level/'">🎮 원소게임선택 (ZONE)</button>
     </div>
   </div>
   <div class="progress-wrap"><div class="progress-bar" id="progress-bar" style="width:10%"></div></div>
@@ -822,7 +838,7 @@ body::before{
 
   <div class="btn-group">
     <button class="btn-retry" onclick="retryGame()">🔄 다시 도전</button>
-    <button class="btn-home" onclick="goHome()">원소 게임 탐험맵으로</button>
+    <button class="btn-home" onclick="goHome()">🎮 원소게임선택 (ZONE)</button>
   </div>
 </div>
 
@@ -1016,7 +1032,7 @@ function renderQuestion(){
   document.getElementById('q-name').textContent = q.name;
   document.getElementById('q-hint').textContent = '💡 '+q.hint;
   const cnt = q.answer.length;
-  document.getElementById('q-count').textContent = `🔬 이 화합물을 구성하는 원소 ${cnt}개를 선택하세요`;
+  document.getElementById('q-count').textContent = `🔬 이 화학식을 구성하는 원소 ${cnt}개를 선택하세요`;
 
   const fb = document.getElementById('feedback-bar');
   fb.style.display='none'; fb.className='feedback-bar';
