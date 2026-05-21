@@ -674,7 +674,7 @@ body::before{
   flex:1;display:flex;flex-direction:column;gap:8px;min-width:0;
 }
 .game-right{
-  flex:0.95;display:flex;flex-direction:column;gap:8px;min-width:0;
+  flex:0.82;display:flex;flex-direction:column;gap:8px;min-width:0;
   padding-right:8px;
 }
 @media(max-width:767px){
@@ -793,12 +793,12 @@ body::before{
       <div class="answer-wrap" id="answer-wrap">
         <div class="answer-empty" id="answer-empty">원소를 클릭해서 선택하세요</div>
       </div>
-      <button class="btn-submit" id="btn-submit" onclick="submitAnswer()">정답 제출</button>
     </div>
 
-    <!-- 오른쪽: 원소 선택 그리드 -->
+    <!-- 오른쪽: 원소 선택 그리드 + 제출버튼 -->
     <div class="game-right">
       <div class="elements-grid" id="elements-grid"></div>
+      <button class="btn-submit" id="btn-submit" onclick="submitAnswer()">정답 제출</button>
     </div>
 
   </div><!-- /game-layout -->
