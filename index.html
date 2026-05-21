@@ -830,41 +830,92 @@ const ELEMENTS_1_20 = [
 ];
 
 const COMPOUNDS = [
-  {formula:'H₂O',       name:'물',             answer:['H','O'],       hint:'생명의 근원, 마시는 그것!'},
-  {formula:'NaCl',      name:'염화나트륨 (소금)',answer:['Na','Cl'],     hint:'바닷물에서 얻는 조미료'},
-  {formula:'CO₂',       name:'이산화탄소',      answer:['C','O'],       hint:'온실 효과의 주범'},
-  {formula:'H₂O₂',      name:'과산화수소',      answer:['H','O'],       hint:'상처 소독에 쓰는 투명 액체'},
-  {formula:'NH₃',       name:'암모니아',        answer:['N','H'],       hint:'자극적인 냄새의 질소 화합물'},
-  {formula:'CH₄',       name:'메테인',          answer:['C','H'],       hint:'천연가스의 주성분'},
-  {formula:'NaOH',      name:'수산화나트륨',     answer:['Na','O','H'],  hint:'강염기성 세제 원료'},
-  {formula:'HCl',       name:'염산',            answer:['H','Cl'],      hint:'위장에서 분비되는 강산'},
-  {formula:'CaCO₃',     name:'탄산칼슘',        answer:['Ca','C','O'],  hint:'석회암·달걀껍데기의 주성분'},
-  {formula:'MgO',       name:'산화마그네슘',     answer:['Mg','O'],      hint:'제산제·불꽃놀이에 쓰이는 흰 가루'},
-  {formula:'Al₂O₃',     name:'산화알루미늄',     answer:['Al','O'],      hint:'루비·사파이어의 주성분'},
-  {formula:'SiO₂',      name:'이산화규소',       answer:['Si','O'],      hint:'모래·유리의 주성분'},
-  {formula:'H₂SO₄',     name:'황산',            answer:['H','S','O'],   hint:'배터리 속에 들어있는 강산'},
-  {formula:'HNO₃',      name:'질산',            answer:['H','N','O'],   hint:'폭발물·비료 제조에 사용되는 산'},
-  {formula:'HF',        name:'플루오린화수소산', answer:['H','F'],       hint:'유리를 녹이는 위험한 산'},
-  {formula:'Ca(OH)₂',   name:'수산화칼슘 (석회수)',answer:['Ca','O','H'],hint:'시멘트·미장 재료'},
-  {formula:'Na₂CO₃',    name:'탄산나트륨 (소다)', answer:['Na','C','O'], hint:'세탁용 소다, 유리 제조 원료'},
-  {formula:'KCl',       name:'염화칼륨',         answer:['K','Cl'],      hint:'비료·식품 첨가물'},
-  {formula:'AlCl₃',     name:'염화알루미늄',     answer:['Al','Cl'],     hint:'발한 억제제·촉매로 사용'},
-  {formula:'MgCl₂',     name:'염화마그네슘',     answer:['Mg','Cl'],     hint:'두부를 굳힐 때 쓰는 간수의 성분'},
-  {formula:'CaF₂',      name:'형석',            answer:['Ca','F'],      hint:'치아 불소 처리에 쓰이는 광물'},
-  {formula:'H₃PO₄',     name:'인산',            answer:['H','P','O'],   hint:'콜라의 신맛을 내는 성분'},
-  {formula:'Na₃PO₄',    name:'인산삼나트륨',     answer:['Na','P','O'],  hint:'세제·식품 첨가물'},
-  {formula:'BF₃',       name:'삼플루오린화붕소', answer:['B','F'],       hint:'화학 반응의 루이스 산 촉매'},
-  {formula:'BeO',       name:'산화베릴륨',       answer:['Be','O'],      hint:'우주항공 부품에 쓰이는 내열 세라믹'},
-  {formula:'Li₂O',      name:'산화리튬',         answer:['Li','O'],      hint:'배터리 전해질 연구에 활용'},
-  {formula:'CaCl₂',     name:'염화칼슘',         answer:['Ca','Cl'],     hint:'도로 제설제·건조제'},
+  // H (수소)
+  {formula:'H₂O',       name:'물',                      answer:['H','O'],       hint:'생명의 근원, 마시는 그것!'},
+  {formula:'H₂O₂',      name:'과산화수소',               answer:['H','O'],       hint:'상처 소독에 쓰는 투명 액체'},
+  {formula:'NH₃',       name:'암모니아',                 answer:['N','H'],       hint:'자극적인 냄새의 질소 화합물'},
+  {formula:'CH₄',       name:'메테인',                   answer:['C','H'],       hint:'천연가스의 주성분'},
+  {formula:'HCl',       name:'염산',                     answer:['H','Cl'],      hint:'위장에서 분비되는 강산'},
+  {formula:'HF',        name:'플루오린화수소산',           answer:['H','F'],       hint:'유리를 녹이는 위험한 산'},
+  {formula:'H₂S',       name:'황화수소',                 answer:['H','S'],       hint:'썩은 달걀 냄새 나는 독성 기체'},
+  {formula:'H₂SO₄',     name:'황산',                     answer:['H','S','O'],   hint:'배터리 속에 들어있는 강산'},
+  {formula:'HNO₃',      name:'질산',                     answer:['H','N','O'],   hint:'폭발물·비료 제조에 사용되는 산'},
+  {formula:'H₃PO₄',     name:'인산',                     answer:['H','P','O'],   hint:'콜라의 신맛을 내는 성분'},
+  // He (헬륨) - 단원자 비활성기체, 화합물 없음 → 출제 제외
+  // Li (리튬)
+  {formula:'Li₂O',      name:'산화리튬',                 answer:['Li','O'],      hint:'배터리 전해질 연구에 활용'},
+  {formula:'LiCl',      name:'염화리튬',                 answer:['Li','Cl'],     hint:'에어컨 흡습제·리튬 전지 원료'},
+  {formula:'LiOH',      name:'수산화리튬',               answer:['Li','O','H'],  hint:'우주선 이산화탄소 흡수제'},
+  // Be (베릴륨)
+  {formula:'BeO',       name:'산화베릴륨',               answer:['Be','O'],      hint:'우주항공 부품에 쓰이는 내열 세라믹'},
+  {formula:'BeCl₂',     name:'염화베릴륨',               answer:['Be','Cl'],     hint:'유기합성 촉매로 사용'},
+  {formula:'BeF₂',      name:'플루오린화베릴륨',          answer:['Be','F'],      hint:'핵연료 용융염 반응로 성분'},
+  // B (붕소)
+  {formula:'B₂O₃',      name:'산화붕소',                 answer:['B','O'],       hint:'유리·법랑 제조의 융제'},
+  {formula:'BF₃',       name:'삼플루오린화붕소',          answer:['B','F'],       hint:'화학 반응의 루이스 산 촉매'},
+  {formula:'BCl₃',      name:'삼염화붕소',               answer:['B','Cl'],      hint:'반도체 식각 공정에 사용'},
+  {formula:'H₃BO₃',     name:'붕산',                     answer:['H','B','O'],   hint:'눈 세척·방부제로 쓰이는 약산'},
+  // C (탄소)
+  {formula:'CO₂',       name:'이산화탄소',               answer:['C','O'],       hint:'온실 효과의 주범'},
+  {formula:'CO',        name:'일산화탄소',               answer:['C','O'],       hint:'무색무취의 맹독성 기체'},
+  {formula:'CF₄',       name:'사플루오린화탄소',          answer:['C','F'],       hint:'강력한 온실가스·절연체'},
+  {formula:'CS₂',       name:'이황화탄소',               answer:['C','S'],       hint:'고무 가황·살충제 원료'},
+  // N (질소)
+  {formula:'N₂O',       name:'아산화질소',               answer:['N','O'],       hint:'마취제·웃음가스'},
+  {formula:'NO₂',       name:'이산화질소',               answer:['N','O'],       hint:'갈색 대기오염 기체'},
+  {formula:'NF₃',       name:'삼플루오린화질소',          answer:['N','F'],       hint:'반도체 세정 가스'},
+  // O (산소) - 위 화합물에 포함
+  // F (플루오린) - 위 화합물에 포함
+  // Ne (네온) - 단원자 비활성기체, 화합물 없음 → 출제 제외
+  // Na (나트륨)
+  {formula:'NaCl',      name:'염화나트륨 (소금)',         answer:['Na','Cl'],     hint:'바닷물에서 얻는 조미료'},
+  {formula:'NaOH',      name:'수산화나트륨',             answer:['Na','O','H'],  hint:'강염기성 세제 원료'},
+  {formula:'Na₂CO₃',    name:'탄산나트륨 (소다)',         answer:['Na','C','O'],  hint:'세탁용 소다, 유리 제조 원료'},
   {formula:'NaHCO₃',    name:'탄산수소나트륨 (베이킹소다)',answer:['Na','H','C','O'],hint:'빵을 부풀리는 흰 가루'},
-  {formula:'K₂O',       name:'산화칼륨',         answer:['K','O'],       hint:'비료 성분으로 쓰이는 칼륨 산화물'},
-  {formula:'P₄O₁₀',     name:'오산화이인',       answer:['P','O'],       hint:'강력한 건조제·인산 무수물'},
-  {formula:'SO₂',       name:'이산화황',         answer:['S','O'],       hint:'화산 가스·산성비의 원인'},
-  {formula:'SO₃',       name:'삼산화황',         answer:['S','O'],       hint:'황산 제조의 중간 물질'},
-  {formula:'N₂O',       name:'아산화질소',       answer:['N','O'],       hint:'마취제·웃음가스'},
-  {formula:'NO₂',       name:'이산화질소',       answer:['N','O'],       hint:'갈색 대기오염 기체'},
-  {formula:'CF₄',       name:'사플루오린화탄소', answer:['C','F'],       hint:'강력한 온실가스·절연체'},
+  {formula:'Na₃PO₄',    name:'인산삼나트륨',             answer:['Na','P','O'],  hint:'세제·식품 첨가물'},
+  {formula:'Na₂SO₄',    name:'황산나트륨',               answer:['Na','S','O'],  hint:'세제·유리 제조 원료'},
+  {formula:'NaF',       name:'플루오린화나트륨',          answer:['Na','F'],      hint:'치약의 충치 예방 성분'},
+  // Mg (마그네슘)
+  {formula:'MgO',       name:'산화마그네슘',             answer:['Mg','O'],      hint:'제산제·불꽃놀이에 쓰이는 흰 가루'},
+  {formula:'MgCl₂',     name:'염화마그네슘',             answer:['Mg','Cl'],     hint:'두부를 굳힐 때 쓰는 간수의 성분'},
+  {formula:'Mg(OH)₂',   name:'수산화마그네슘',           answer:['Mg','O','H'],  hint:'제산제·완하제로 쓰이는 우유빛 액체'},
+  {formula:'MgSO₄',     name:'황산마그네슘',             answer:['Mg','S','O'],  hint:'엡솜 소금, 근육 이완 목욕제'},
+  {formula:'MgCO₃',     name:'탄산마그네슘',             answer:['Mg','C','O'],  hint:'체조 선수 손바닥에 바르는 흰 가루'},
+  // Al (알루미늄)
+  {formula:'Al₂O₃',     name:'산화알루미늄',             answer:['Al','O'],      hint:'루비·사파이어의 주성분'},
+  {formula:'AlCl₃',     name:'염화알루미늄',             answer:['Al','Cl'],     hint:'발한 억제제·촉매로 사용'},
+  {formula:'Al(OH)₃',   name:'수산화알루미늄',           answer:['Al','O','H'],  hint:'제산제·정수 처리 응집제'},
+  {formula:'AlF₃',      name:'플루오린화알루미늄',        answer:['Al','F'],      hint:'알루미늄 제련 전해질 성분'},
+  // Si (규소)
+  {formula:'SiO₂',      name:'이산화규소',               answer:['Si','O'],      hint:'모래·유리의 주성분'},
+  {formula:'SiC',       name:'탄화규소',                 answer:['Si','C'],      hint:'다이아몬드 다음으로 단단한 연마재'},
+  {formula:'SiCl₄',     name:'사염화규소',               answer:['Si','Cl'],     hint:'반도체·광섬유 제조 원료'},
+  {formula:'SiF₄',      name:'사플루오린화규소',          answer:['Si','F'],      hint:'유리 식각·반도체 공정 가스'},
+  // P (인)
+  {formula:'P₄O₁₀',     name:'오산화이인',               answer:['P','O'],       hint:'강력한 건조제·인산 무수물'},
+  {formula:'PCl₃',      name:'삼염화인',                 answer:['P','Cl'],      hint:'농약·의약품 합성 원료'},
+  {formula:'PF₃',       name:'삼플루오린화인',            answer:['P','F'],       hint:'반도체 이온 주입 공정 가스'},
+  // S (황)
+  {formula:'SO₂',       name:'이산화황',                 answer:['S','O'],       hint:'화산 가스·산성비의 원인'},
+  {formula:'SO₃',       name:'삼산화황',                 answer:['S','O'],       hint:'황산 제조의 중간 물질'},
+  {formula:'SF₆',       name:'육플루오린화황',            answer:['S','F'],       hint:'초강력 온실가스·전기 절연체'},
+  // Cl (염소) - NaCl, HCl 등 포함
+  // Ar (아르곤) - 단원자 비활성기체, 화합물 없음 → 출제 제외
+  // K (칼륨)
+  {formula:'KCl',       name:'염화칼륨',                 answer:['K','Cl'],      hint:'비료·식품 첨가물'},
+  {formula:'K₂O',       name:'산화칼륨',                 answer:['K','O'],       hint:'비료 성분으로 쓰이는 칼륨 산화물'},
+  {formula:'KOH',       name:'수산화칼륨',               answer:['K','O','H'],   hint:'알칼리 배터리·비누 제조 원료'},
+  {formula:'KF',        name:'플루오린화칼륨',            answer:['K','F'],       hint:'용접 플럭스·살충제 성분'},
+  {formula:'K₂CO₃',     name:'탄산칼륨',                 answer:['K','C','O'],   hint:'유리·비누 제조 원료, 탄산칼리'},
+  {formula:'K₂SO₄',     name:'황산칼륨',                 answer:['K','S','O'],   hint:'황산칼리 비료, 염소 없는 칼륨 비료'},
+  // Ca (칼슘)
+  {formula:'CaCO₃',     name:'탄산칼슘',                 answer:['Ca','C','O'],  hint:'석회암·달걀껍데기의 주성분'},
+  {formula:'Ca(OH)₂',   name:'수산화칼슘 (석회수)',       answer:['Ca','O','H'],  hint:'시멘트·미장 재료'},
+  {formula:'CaCl₂',     name:'염화칼슘',                 answer:['Ca','Cl'],     hint:'도로 제설제·건조제'},
+  {formula:'CaF₂',      name:'형석',                     answer:['Ca','F'],      hint:'치아 불소 처리에 쓰이는 광물'},
+  {formula:'CaO',       name:'산화칼슘 (생석회)',         answer:['Ca','O'],      hint:'발열 도시락·건조제로 쓰이는 흰 가루'},
+  {formula:'CaSO₄',     name:'황산칼슘 (석고)',           answer:['Ca','S','O'],  hint:'석고 붕대·칠판 분필 재료'},
+  {formula:'CaSiO₃',    name:'규산칼슘',                 answer:['Ca','Si','O'], hint:'시멘트·도자기 유약 성분'},
 ];
 
 (function(){
@@ -952,7 +1003,7 @@ function startGame(){
   const n = document.getElementById('name-input').value.trim();
   if(!n){ document.getElementById('name-input').focus(); return; }
   playerName = n;
-  const pool = COMPOUNDS.filter(c => c.answer.length === 2 || c.answer.length === 3); shuffle(pool);
+  const pool = [...COMPOUNDS]; shuffle(pool);
   questions = pool.slice(0,10);
   qIndex=0; score=0; streak=0; results=[]; selected=[];
   showScreen('screen-game');
