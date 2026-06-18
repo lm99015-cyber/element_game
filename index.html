@@ -205,8 +205,19 @@ body::before{
 .lb-title{
   font-size:13px;font-weight:800;color:var(--muted);
   letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;
-  display:flex;align-items:center;gap:6px;
+  display:flex;align-items:center;gap:6px;justify-content:space-between;
 }
+
+/* 리더보드 이미지 저장 버튼 기능 : 시작 화면의 리더보드를 이미지로 저장하는 작은 버튼입니다. */
+.btn-lb-save{
+  background:none;border:1.5px solid var(--border);border-radius:8px;
+  padding:4px 10px;font-size:11px;font-weight:800;color:var(--muted);
+  cursor:pointer;font-family:'Noto Sans KR',sans-serif;letter-spacing:0;text-transform:none;
+  display:flex;align-items:center;gap:4px;transition:all 0.15s;flex-shrink:0;
+}
+.btn-lb-save:hover{border-color:var(--blue);color:var(--blue);background:#eff6ff;}
+.btn-lb-save:disabled{opacity:0.5;cursor:not-allowed;}
+
 .lb-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)}
 .lb-row:last-child{border-bottom:none}
 .lb-rank{font-size:16px;width:26px;text-align:center;flex-shrink:0}
@@ -214,6 +225,14 @@ body::before{
 .lb-score{font-size:14px;font-weight:800;color:var(--accent)}
 .lb-time{font-size:11px;color:var(--muted);font-weight:700;margin-left:4px}
 
+/* 이미지 저장 헤더 기능 : 이미지로 저장할 때만 보이는 제목과 날짜입니다. */
+.print-header{
+  display:none;text-align:center;
+  padding:14px 0 12px;margin-bottom:4px;
+  border-bottom:2px solid #e0d0b0;
+}
+.print-title{font-size:16px;font-weight:900;color:var(--text);margin-bottom:2px;letter-spacing:-0.5px;}
+.print-meta{font-size:11px;color:var(--muted);font-weight:700;}
 
 /* 상단 홈/돌아가기 버튼 기능 : 게임 화면 위쪽의 처음으로·게임존 버튼 모양입니다. */
 .btn-hud-home{
@@ -621,8 +640,8 @@ body::before{
   .lb-table{ border-radius:14px; }
 }
 
-/* 결과 화면 버튼 기능 : 다시 도전·게임존으로 가는 버튼들입니다. */
-.btn-group{display:flex;gap:10px;width:100%}
+/* 결과 화면 버튼 기능 : 다시 도전·게임존·이미지 저장 버튼들입니다. */
+.btn-group{display:flex;gap:10px;width:100%;flex-wrap:wrap;}
 .btn-retry{
   flex:1;padding:18px;border-radius:16px;cursor:pointer;
   font-size:17px;font-weight:800;font-family:'Noto Sans KR',sans-serif;
@@ -647,6 +666,17 @@ body::before{
 @media (max-width:599px){
   .btn-retry,.btn-home{ padding:14px; font-size:15px; border-radius:14px; }
 }
+
+/* 결과 이미지 저장 버튼 기능 : 리더보드 결과를 이미지로 다운받는 버튼입니다. */
+.btn-print{
+  flex-basis:100%;padding:13px;border-radius:14px;cursor:pointer;
+  font-size:14px;font-weight:800;font-family:'Noto Sans KR',sans-serif;
+  background:var(--surface);color:var(--muted);
+  border:2px solid var(--border);transition:all 0.15s;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+}
+.btn-print:hover{border-color:var(--blue);color:var(--blue);background:#eff6ff;transform:translateY(-2px)}
+.btn-print:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
 
 /* 화면 숨김 기능 : 보이지 않게 할 화면에 붙이는 표시입니다. */
 .hidden{display:none!important}
@@ -779,7 +809,10 @@ body::before{
 
   <!-- 리더보드 미리보기 기능 : 이전 기록이 있으면 상위 순위를 보여 줍니다. -->
   <div class="lb-preview" id="lb-preview" style="display:none">
-    <div class="lb-title">🏆 리더보드</div>
+    <div class="lb-title">
+      <span>🏆 리더보드</span>
+      <button class="btn-lb-save" onclick="saveLbImage()">📥 이미지로 저장</button>
+    </div>
     <div id="lb-preview-rows"></div>
   </div>
 </div>
@@ -853,6 +886,12 @@ body::before{
 
 <!-- 결과 화면 기능 : 등급·점수·통계·오답 리뷰·리더보드와 버튼을 보여 줍니다. -->
 <div class="page hidden" id="screen-result">
+  <!-- 이미지 저장 전용 헤더 기능 : 이미지로 저장할 때만 보이는 제목과 날짜·이름을 담습니다. -->
+  <div class="print-header">
+    <div class="print-title">⚗️ 원소 조합 게임 결과</div>
+    <div class="print-meta" id="print-meta"></div>
+  </div>
+
   <div class="result-badge" id="result-badge">🎉</div>
   <div class="result-title" id="result-title">퀴즈 완료!</div>
   <div class="result-name" id="result-name"></div>
@@ -891,6 +930,7 @@ body::before{
   <div class="btn-group">
     <button class="btn-retry" onclick="retryGame()">🔄 다시 도전</button>
     <button class="btn-home" onclick="goHome()">🎮 원소게임선택 (ZONE)</button>
+    <button class="btn-print" onclick="saveResultImage()">📥 이미지로 저장</button>
   </div>
 </div>
 
@@ -919,9 +959,8 @@ const ELEMENTS_1_20 = [
   {num:20,sym:'Ca', name:'칼슘',    cat:'metal'},
 ];
 
-/* 화합물 문제 데이터 저장 기능 : 출제할 화합물 목록입니다. 각 화합물마다 화학식(formula), 이름(name), 구성 원소 정답(answer), 힌트(hint)를 담았습니다. 아래 // 표시는 원소별로 묶어 둔 구분입니다. */
+/* 화합물 문제 데이터 저장 기능 : 출제할 화합물 목록입니다. */
 const COMPOUNDS = [
-  // H (수소)
   {formula:'H₂O',       name:'물',                      answer:['H','O'],       hint:'생명의 근원, 마시는 그것!'},
   {formula:'H₂O₂',      name:'과산화수소',               answer:['H','O'],       hint:'상처 소독에 쓰는 투명 액체'},
   {formula:'NH₃',       name:'암모니아',                 answer:['N','H'],       hint:'자극적인 냄새의 질소 화합물'},
@@ -932,33 +971,23 @@ const COMPOUNDS = [
   {formula:'H₂SO₄',     name:'황산',                     answer:['H','S','O'],   hint:'배터리 속에 들어있는 강산'},
   {formula:'HNO₃',      name:'질산',                     answer:['H','N','O'],   hint:'폭발물·비료 제조에 사용되는 산'},
   {formula:'H₃PO₄',     name:'인산',                     answer:['H','P','O'],   hint:'콜라의 신맛을 내는 성분'},
-  // He (헬륨) - 단원자 비활성기체, 화합물 없음 → 출제 제외
-  // Li (리튬)
   {formula:'Li₂O',      name:'산화리튬',                 answer:['Li','O'],      hint:'배터리 전해질 연구에 활용'},
   {formula:'LiCl',      name:'염화리튬',                 answer:['Li','Cl'],     hint:'에어컨 흡습제·리튬 전지 원료'},
   {formula:'LiOH',      name:'수산화리튬',               answer:['Li','O','H'],  hint:'우주선 이산화탄소 흡수제'},
-  // Be (베릴륨)
   {formula:'BeO',       name:'산화베릴륨',               answer:['Be','O'],      hint:'우주항공 부품에 쓰이는 내열 세라믹'},
   {formula:'BeCl₂',     name:'염화베릴륨',               answer:['Be','Cl'],     hint:'유기합성 촉매로 사용'},
   {formula:'BeF₂',      name:'플루오린화베릴륨',          answer:['Be','F'],      hint:'핵연료 용융염 반응로 성분'},
-  // B (붕소)
   {formula:'B₂O₃',      name:'산화붕소',                 answer:['B','O'],       hint:'유리·법랑 제조의 융제'},
   {formula:'BF₃',       name:'삼플루오린화붕소',          answer:['B','F'],       hint:'화학 반응의 루이스 산 촉매'},
   {formula:'BCl₃',      name:'삼염화붕소',               answer:['B','Cl'],      hint:'반도체 식각 공정에 사용'},
   {formula:'H₃BO₃',     name:'붕산',                     answer:['H','B','O'],   hint:'눈 세척·방부제로 쓰이는 약산'},
-  // C (탄소)
   {formula:'CO₂',       name:'이산화탄소',               answer:['C','O'],       hint:'온실 효과의 주범'},
   {formula:'CO',        name:'일산화탄소',               answer:['C','O'],       hint:'무색무취의 맹독성 기체'},
   {formula:'CF₄',       name:'사플루오린화탄소',          answer:['C','F'],       hint:'강력한 온실가스·절연체'},
   {formula:'CS₂',       name:'이황화탄소',               answer:['C','S'],       hint:'고무 가황·살충제 원료'},
-  // N (질소)
   {formula:'N₂O',       name:'아산화질소',               answer:['N','O'],       hint:'마취제·웃음가스'},
   {formula:'NO₂',       name:'이산화질소',               answer:['N','O'],       hint:'갈색 대기오염 기체'},
   {formula:'NF₃',       name:'삼플루오린화질소',          answer:['N','F'],       hint:'반도체 세정 가스'},
-  // O (산소) - 위 화합물에 포함
-  // F (플루오린) - 위 화합물에 포함
-  // Ne (네온) - 단원자 비활성기체, 화합물 없음 → 출제 제외
-  // Na (나트륨)
   {formula:'NaCl',      name:'염화나트륨 (소금)',         answer:['Na','Cl'],     hint:'바닷물에서 얻는 조미료'},
   {formula:'NaOH',      name:'수산화나트륨',             answer:['Na','O','H'],  hint:'강염기성 세제 원료'},
   {formula:'Na₂CO₃',    name:'탄산나트륨 (소다)',         answer:['Na','C','O'],  hint:'세탁용 소다, 유리 제조 원료'},
@@ -966,40 +995,31 @@ const COMPOUNDS = [
   {formula:'Na₃PO₄',    name:'인산삼나트륨',             answer:['Na','P','O'],  hint:'세제·식품 첨가물'},
   {formula:'Na₂SO₄',    name:'황산나트륨',               answer:['Na','S','O'],  hint:'세제·유리 제조 원료'},
   {formula:'NaF',       name:'플루오린화나트륨',          answer:['Na','F'],      hint:'치약의 충치 예방 성분'},
-  // Mg (마그네슘)
   {formula:'MgO',       name:'산화마그네슘',             answer:['Mg','O'],      hint:'제산제·불꽃놀이에 쓰이는 흰 가루'},
   {formula:'MgCl₂',     name:'염화마그네슘',             answer:['Mg','Cl'],     hint:'두부를 굳힐 때 쓰는 간수의 성분'},
   {formula:'Mg(OH)₂',   name:'수산화마그네슘',           answer:['Mg','O','H'],  hint:'제산제·완하제로 쓰이는 우유빛 액체'},
   {formula:'MgSO₄',     name:'황산마그네슘',             answer:['Mg','S','O'],  hint:'엡솜 소금, 근육 이완 목욕제'},
   {formula:'MgCO₃',     name:'탄산마그네슘',             answer:['Mg','C','O'],  hint:'체조 선수 손바닥에 바르는 흰 가루'},
-  // Al (알루미늄)
   {formula:'Al₂O₃',     name:'산화알루미늄',             answer:['Al','O'],      hint:'루비·사파이어의 주성분'},
   {formula:'AlCl₃',     name:'염화알루미늄',             answer:['Al','Cl'],     hint:'발한 억제제·촉매로 사용'},
   {formula:'Al(OH)₃',   name:'수산화알루미늄',           answer:['Al','O','H'],  hint:'제산제·정수 처리 응집제'},
   {formula:'AlF₃',      name:'플루오린화알루미늄',        answer:['Al','F'],      hint:'알루미늄 제련 전해질 성분'},
-  // Si (규소)
   {formula:'SiO₂',      name:'이산화규소',               answer:['Si','O'],      hint:'모래·유리의 주성분'},
   {formula:'SiC',       name:'탄화규소',                 answer:['Si','C'],      hint:'다이아몬드 다음으로 단단한 연마재'},
   {formula:'SiCl₄',     name:'사염화규소',               answer:['Si','Cl'],     hint:'반도체·광섬유 제조 원료'},
   {formula:'SiF₄',      name:'사플루오린화규소',          answer:['Si','F'],      hint:'유리 식각·반도체 공정 가스'},
-  // P (인)
   {formula:'P₄O₁₀',     name:'오산화이인',               answer:['P','O'],       hint:'강력한 건조제·인산 무수물'},
   {formula:'PCl₃',      name:'삼염화인',                 answer:['P','Cl'],      hint:'농약·의약품 합성 원료'},
   {formula:'PF₃',       name:'삼플루오린화인',            answer:['P','F'],       hint:'반도체 이온 주입 공정 가스'},
-  // S (황)
   {formula:'SO₂',       name:'이산화황',                 answer:['S','O'],       hint:'화산 가스·산성비의 원인'},
   {formula:'SO₃',       name:'삼산화황',                 answer:['S','O'],       hint:'황산 제조의 중간 물질'},
   {formula:'SF₆',       name:'육플루오린화황',            answer:['S','F'],       hint:'초강력 온실가스·전기 절연체'},
-  // Cl (염소) - NaCl, HCl 등 포함
-  // Ar (아르곤) - 단원자 비활성기체, 화합물 없음 → 출제 제외
-  // K (칼륨)
   {formula:'KCl',       name:'염화칼륨',                 answer:['K','Cl'],      hint:'비료·식품 첨가물'},
   {formula:'K₂O',       name:'산화칼륨',                 answer:['K','O'],       hint:'비료 성분으로 쓰이는 칼륨 산화물'},
   {formula:'KOH',       name:'수산화칼륨',               answer:['K','O','H'],   hint:'알칼리 배터리·비누 제조 원료'},
   {formula:'KF',        name:'플루오린화칼륨',            answer:['K','F'],       hint:'용접 플럭스·살충제 성분'},
   {formula:'K₂CO₃',     name:'탄산칼륨',                 answer:['K','C','O'],   hint:'유리·비누 제조 원료, 탄산칼리'},
   {formula:'K₂SO₄',     name:'황산칼륨',                 answer:['K','S','O'],   hint:'황산칼리 비료, 염소 없는 칼륨 비료'},
-  // Ca (칼슘)
   {formula:'CaCO₃',     name:'탄산칼슘',                 answer:['Ca','C','O'],  hint:'석회암·달걀껍데기의 주성분'},
   {formula:'Ca(OH)₂',   name:'수산화칼슘 (석회수)',       answer:['Ca','O','H'],  hint:'시멘트·미장 재료'},
   {formula:'CaCl₂',     name:'염화칼슘',                 answer:['Ca','Cl'],     hint:'도로 제설제·건조제'},
@@ -1166,7 +1186,6 @@ function renderQuestion(){
   renderAnswerWrap();
   document.getElementById('btn-submit').disabled = false;
 
-  // 버튼 실제 너비에 맞춰 글씨 크기 조정
   requestAnimationFrame(() => {
     const btn = document.querySelector('.el-btn');
     if (!btn) return;
@@ -1310,6 +1329,90 @@ function endGame(){
   }
 }
 
+/* 리더보드 이미지 저장 기능 : 시작 화면의 리더보드 카드를 PNG로 캡처해 다운받습니다. */
+async function saveLbImage(){
+  const btn=document.querySelector('.btn-lb-save');
+  const lbEl=document.getElementById('lb-preview');
+  btn.textContent='⏳';
+  btn.disabled=true;
+  try{
+    const canvas=await html2canvas(lbEl,{
+      backgroundColor:'#ffffff',
+      scale:2,
+      useCORS:true,
+      logging:false
+    });
+    const date=new Date().toLocaleDateString('ko-KR').replace(/\. /g,'-').replace('.','');
+    const link=document.createElement('a');
+    link.download=`원소조합_리더보드_${date}.png`;
+    link.href=canvas.toDataURL('image/png');
+    link.click();
+  } catch(e){
+    alert('이미지 생성에 실패했습니다.');
+    console.error(e);
+  }
+  btn.innerHTML='📥 이미지로 저장';
+  btn.disabled=false;
+}
+
+/* 결과 이미지 저장 기능 : html2canvas로 결과 화면을 캡처해 PNG 파일로 다운받습니다. */
+async function saveResultImage(){
+  const btn=document.querySelector('.btn-print');
+  const header=document.querySelector('.print-header');
+  const floatEls=document.getElementById('float-els');
+  const resultEl=document.getElementById('screen-result');
+
+  /* 버튼 로딩 상태 전환 기능 : 생성 중임을 표시하고 중복 클릭을 막습니다. */
+  btn.textContent='⏳ 이미지 생성 중...';
+  btn.disabled=true;
+
+  /* 캡처 헤더 채우기 기능 : 이름과 현재 날짜·시각을 헤더에 씁니다. */
+  const now=new Date().toLocaleString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+  document.getElementById('print-meta').textContent=`${playerName} 님  ·  ${now}`;
+
+  /* 캡처 전 임시 스타일 적용 기능 : 헤더를 보이게 하고, 배경 원소와 여백을 정리합니다. */
+  header.style.display='block';
+  floatEls.style.visibility='hidden';
+  const origMin=resultEl.style.minHeight;
+  const origAlign=resultEl.style.alignItems;
+  const origJustify=resultEl.style.justifyContent;
+  const origPadTop=resultEl.style.paddingTop;
+  resultEl.style.minHeight='auto';
+  resultEl.style.alignItems='center';
+  resultEl.style.justifyContent='flex-start';
+  resultEl.style.paddingTop='20px';
+
+  try{
+    const canvas=await html2canvas(resultEl,{
+      backgroundColor:'#fffbf0',
+      scale:2,
+      useCORS:true,
+      logging:false,
+      ignoreElements:el=>el===floatEls
+    });
+
+    /* 파일 다운로드 기능 : 캡처된 캔버스를 PNG로 변환해 자동 다운로드합니다. */
+    const date=new Date().toLocaleDateString('ko-KR').replace(/\. /g,'-').replace('.','');
+    const link=document.createElement('a');
+    link.download=`원소조합_${playerName}_${date}.png`;
+    link.href=canvas.toDataURL('image/png');
+    link.click();
+  } catch(e){
+    alert('이미지 생성에 실패했습니다. 다시 시도해 주세요.');
+    console.error(e);
+  }
+
+  /* 캡처 후 원상 복구 기능 : 헤더를 숨기고 스타일을 원래대로 되돌립니다. */
+  header.style.display='none';
+  floatEls.style.visibility='';
+  resultEl.style.minHeight=origMin;
+  resultEl.style.alignItems=origAlign;
+  resultEl.style.justifyContent=origJustify;
+  resultEl.style.paddingTop=origPadTop;
+  btn.textContent='📥 이미지로 저장';
+  btn.disabled=false;
+}
+
 /* 첫 화면 리더보드 표시 실행 기능 : 페이지가 열릴 때 리더보드 미리보기를 한 번 그립니다. */
 renderLbPreview();
 
@@ -1324,5 +1427,7 @@ window.addEventListener('resize', () => {
   });
 });
 </script>
+<!-- html2canvas 라이브러리 기능 : 결과 화면을 이미지로 캡처할 때 사용합니다. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>
